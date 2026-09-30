@@ -4,11 +4,11 @@ import { Volume2, VolumeX } from 'lucide-react';
 const YOUTUBE_VIDEO_ID = 'ivrumxRUz_Y';
 
 export default function AudioControl({ autoPlayTrigger }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true); // Intended initial state: music ON
   const playerRef = useRef(null);
-  const playRequestedRef = useRef(true); // Default musicEnabled = true on load
+  const playRequestedRef = useRef(true); // Intended default: true on load
 
-  // Initialize YouTube IFrame Player API
+  // Initialize YouTube IFrame Player API immediately on application / page load
   useEffect(() => {
     let isMounted = true;
 
@@ -24,7 +24,7 @@ export default function AudioControl({ autoPlayTrigger }) {
           width: '1',
           videoId: YOUTUBE_VIDEO_ID,
           playerVars: {
-            autoplay: 1, // Autoplay attempt on load
+            autoplay: 1, // Autoplay configured for immediate page load
             controls: 0,
             disablekb: 1,
             fs: 0,
@@ -37,17 +37,14 @@ export default function AudioControl({ autoPlayTrigger }) {
           },
           events: {
             onReady: (event) => {
+              // 1. Immediate playback attempt as soon as the opening screen / player is ready
               try {
-                event.target.setVolume(35); // 30–40% background volume
-              } catch (err) {
-                console.log('Set volume error:', err);
-              }
-              if (playRequestedRef.current) {
-                try {
+                event.target.setVolume(35); // 35% background volume
+                if (playRequestedRef.current) {
                   event.target.playVideo();
-                } catch (err) {
-                  console.log('Play on ready error:', err);
                 }
+              } catch (err) {
+                console.log('Immediate autoplay on load error:', err);
               }
             },
             onStateChange: (event) => {
@@ -71,7 +68,7 @@ export default function AudioControl({ autoPlayTrigger }) {
       }
     };
 
-    // Load YouTube IFrame API script dynamically
+    // Load YouTube IFrame API script dynamically immediately on page load
     if (!window.YT) {
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
@@ -93,36 +90,19 @@ export default function AudioControl({ autoPlayTrigger }) {
       };
     }
 
-    // Fallback: Use earliest user interaction (touch/click) to initiate playback if browser blocked initial load autoplay
-    const handleFirstUserGesture = () => {
-      if (playRequestedRef.current && playerRef.current && typeof playerRef.current.playVideo === 'function') {
-        try {
-          playerRef.current.playVideo();
-        } catch (e) {
-          console.log('Gesture play error:', e);
-        }
-      }
-    };
-
-    window.addEventListener('click', handleFirstUserGesture, { once: true });
-    window.addEventListener('touchstart', handleFirstUserGesture, { once: true });
-
     return () => {
       isMounted = false;
-      window.removeEventListener('click', handleFirstUserGesture);
-      window.removeEventListener('touchstart', handleFirstUserGesture);
     };
   }, []);
 
-  // Handle autoPlayTrigger (e.g. when user taps TAP TO OPEN)
+  // Handle autoPlayTrigger (e.g. when user taps TAP TO OPEN - graceful fallback if browser blocked initial load autoplay)
   useEffect(() => {
-    if (autoPlayTrigger) {
-      playRequestedRef.current = true;
+    if (autoPlayTrigger && playRequestedRef.current) {
       if (playerRef.current && typeof playerRef.current.playVideo === 'function') {
         try {
           playerRef.current.playVideo();
         } catch (e) {
-          console.log('Play video error:', e);
+          console.log('Trigger play error:', e);
         }
       }
     }
