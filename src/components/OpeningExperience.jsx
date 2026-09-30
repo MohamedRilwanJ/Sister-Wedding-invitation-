@@ -7,7 +7,7 @@ export default function OpeningExperience({ onOpeningStart, onOpenComplete }) {
   const handleSealTap = () => {
     if (stage !== 'closed') return;
     
-    // Step 1: Notify parent that opening has started so Hero reveals underneath
+    // Step 1: Notify parent that opening has started so Hero reveals underneath instantly
     if (onOpeningStart) onOpeningStart();
 
     setStage('animating');
@@ -28,15 +28,26 @@ export default function OpeningExperience({ onOpeningStart, onOpenComplete }) {
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity duration-500 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity duration-500 touch-none select-none ${
         stage === 'closed' ? 'bg-[#FFFDF8]' : 'bg-transparent'
       } ${
         isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
       } ${stage === 'animating' ? 'pointer-events-none' : ''}`}
       aria-label="Closed Nikkah Invitation Envelope"
     >
-      {/* Mobile-First 100dvh Viewport Frame with 3D Perspective */}
-      <div className="relative w-full h-[100vh] h-[100dvh] min-h-[100dvh] max-h-[100dvh] sm:h-[92vh] sm:max-h-[850px] sm:max-w-[430px] bg-transparent sm:rounded-[36px] overflow-hidden flex flex-col justify-center items-center perspective-container">
+      {/* Surrounding Ambient Blurred Floral Background Treatment */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
+        <img 
+          src="/nikkah_opening_cover.jpg" 
+          alt="" 
+          aria-hidden="true"
+          className="w-full h-full object-cover blur-2xl scale-110 opacity-50 brightness-95" 
+        />
+        <div className="absolute inset-0 bg-[#FAF6F0]/40 backdrop-blur-xs"></div>
+      </div>
+
+      {/* Mobile-First 100dvh Responsive Viewport Frame with Safe Area Padding & 3D Perspective */}
+      <div className="relative w-full h-[100vh] h-[100dvh] min-h-[100dvh] max-h-[100dvh] sm:h-[92vh] sm:max-h-[850px] sm:max-w-[430px] bg-transparent sm:rounded-[36px] overflow-hidden flex justify-center items-center perspective-container z-10 p-[env(safe-area-inset-top)_env(safe-area-inset-right)_env(safe-area-inset-bottom)_env(safe-area-inset-left)]">
         
         {/* ========================================================================= */}
         {/* LEFT GATEFOLD PANEL (3D Open to Left)                                     */}
