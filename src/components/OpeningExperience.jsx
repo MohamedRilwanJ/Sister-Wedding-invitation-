@@ -28,7 +28,7 @@ export default function OpeningExperience({ onOpeningStart, onOpenComplete }) {
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity duration-500 touch-none select-none ${
+      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity duration-500 touch-none select-none p-4 sm:p-6 ${
         stage === 'closed' ? 'bg-[#FFFDF8]' : 'bg-transparent'
       } ${
         isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
@@ -41,13 +41,13 @@ export default function OpeningExperience({ onOpeningStart, onOpenComplete }) {
           src="/nikkah_opening_cover.jpg" 
           alt="" 
           aria-hidden="true"
-          className="w-full h-full object-cover blur-2xl scale-110 opacity-50 brightness-95" 
+          className="w-full h-full object-cover blur-2xl scale-110 opacity-55 brightness-95" 
         />
         <div className="absolute inset-0 bg-[#FAF6F0]/40 backdrop-blur-xs"></div>
       </div>
 
-      {/* Mobile-First 100dvh Responsive Viewport Frame with Safe Area Padding & 3D Perspective */}
-      <div className="relative w-full h-[100vh] h-[100dvh] min-h-[100dvh] max-h-[100dvh] sm:h-[92vh] sm:max-h-[850px] sm:max-w-[430px] bg-transparent sm:rounded-[36px] overflow-hidden flex justify-center items-center perspective-container z-10 p-[env(safe-area-inset-top)_env(safe-area-inset-right)_env(safe-area-inset-bottom)_env(safe-area-inset-left)]">
+      {/* Luxury Centered Framed Invitation Card Container (Responsive 88% width / 84% height with breathing room) */}
+      <div className="relative w-[88vw] max-w-[380px] h-[84vh] max-h-[720px] bg-transparent rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.28)] border-2 border-[#E8DEC8]/80 flex justify-center items-center perspective-container z-10 my-auto mx-auto">
         
         {/* ========================================================================= */}
         {/* LEFT GATEFOLD PANEL (3D Open to Left)                                     */}
@@ -98,7 +98,7 @@ export default function OpeningExperience({ onOpeningStart, onOpenComplete }) {
           <button
             onClick={handleSealTap}
             aria-label="Open wedding invitation"
-            className="group relative w-32 h-32 sm:w-36 sm:h-36 rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-transform duration-200"
+            className="group relative w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-transform duration-200 focus:outline-none"
           >
             {/* Soft highlight pulse halo framing the HM seal */}
             <div className="absolute inset-0 rounded-full seal-pulse opacity-60 pointer-events-none"></div>
