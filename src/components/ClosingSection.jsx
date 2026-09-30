@@ -80,6 +80,11 @@ export default function ClosingSection() {
               <span className="text-[9px] text-[#B85D67]">✦</span>
               <span className="w-6 h-[0.7px] bg-[#C5A059]"></span>
             </div>
+
+            {/* Subtle Website Copyright Notice */}
+            <p className="font-serif text-[10px] sm:text-[11px] text-stone-400/80 tracking-wider select-none mt-5 pt-3 border-t border-[#EADECC]/40 w-full max-w-[240px] text-center">
+              © 2026 MohamedRilwan
+            </p>
           </div>
         </ScrollReveal>
       </footer>
