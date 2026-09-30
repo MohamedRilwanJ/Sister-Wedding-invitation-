@@ -83,7 +83,7 @@ export default function ClosingSection() {
 
             {/* Subtle Website Copyright Notice */}
             <p className="font-serif text-[10px] sm:text-[11px] text-stone-400/80 tracking-wider select-none mt-5 pt-3 border-t border-[#EADECC]/40 w-full max-w-[240px] text-center">
-              © 2026 <a href="https://www.instagram.com/_____.rillu._/" target="_blank" rel="noopener noreferrer" className="hover:text-[#C5A059] transition-colors">MohamedRilwan</a>
+              © 2026 <a href="https://www.instagram.com/_____.rillu._/" target="_blank" rel="noopener noreferrer" className="text-[#C5A059] transition-colors">MohamedRilwan</a>
             </p>
           </div>
         </ScrollReveal>
