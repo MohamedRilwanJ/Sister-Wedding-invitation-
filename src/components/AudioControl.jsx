@@ -39,6 +39,7 @@ export default function AudioControl({ autoPlayTrigger }) {
             onReady: (event) => {
               // 1. Immediate playback attempt as soon as the opening screen / player is ready
               try {
+                event.target.unMute();
                 event.target.setVolume(35); // 35% background volume
                 if (playRequestedRef.current) {
                   event.target.playVideo();
