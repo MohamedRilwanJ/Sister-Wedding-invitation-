@@ -6,7 +6,7 @@ const YOUTUBE_VIDEO_ID = 'ivrumxRUz_Y';
 export default function AudioControl({ autoPlayTrigger }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const playerRef = useRef(null);
-  const playRequestedRef = useRef(false);
+  const playRequestedRef = useRef(true); // Default musicEnabled = true on load
 
   // Initialize YouTube IFrame Player API
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function AudioControl({ autoPlayTrigger }) {
           width: '1',
           videoId: YOUTUBE_VIDEO_ID,
           playerVars: {
-            autoplay: 0,
+            autoplay: 1, // Autoplay attempt on load
             controls: 0,
             disablekb: 1,
             fs: 0,
@@ -45,7 +45,6 @@ export default function AudioControl({ autoPlayTrigger }) {
               if (playRequestedRef.current) {
                 try {
                   event.target.playVideo();
-                  setIsPlaying(true);
                 } catch (err) {
                   console.log('Play on ready error:', err);
                 }
@@ -94,19 +93,34 @@ export default function AudioControl({ autoPlayTrigger }) {
       };
     }
 
+    // Fallback: Use earliest user interaction (touch/click) to initiate playback if browser blocked initial load autoplay
+    const handleFirstUserGesture = () => {
+      if (playRequestedRef.current && playerRef.current && typeof playerRef.current.playVideo === 'function') {
+        try {
+          playerRef.current.playVideo();
+        } catch (e) {
+          console.log('Gesture play error:', e);
+        }
+      }
+    };
+
+    window.addEventListener('click', handleFirstUserGesture, { once: true });
+    window.addEventListener('touchstart', handleFirstUserGesture, { once: true });
+
     return () => {
       isMounted = false;
+      window.removeEventListener('click', handleFirstUserGesture);
+      window.removeEventListener('touchstart', handleFirstUserGesture);
     };
   }, []);
 
-  // Handle autoPlayTrigger when user taps "TAP TO OPEN"
+  // Handle autoPlayTrigger (e.g. when user taps TAP TO OPEN)
   useEffect(() => {
     if (autoPlayTrigger) {
       playRequestedRef.current = true;
       if (playerRef.current && typeof playerRef.current.playVideo === 'function') {
         try {
           playerRef.current.playVideo();
-          setIsPlaying(true);
         } catch (e) {
           console.log('Play video error:', e);
         }
