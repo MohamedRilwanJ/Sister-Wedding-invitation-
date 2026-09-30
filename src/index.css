@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background-color: #FFFDF8;
+    color: #262326;
+    overflow-x: hidden;
+  }
+}
+
+.tamil-text {
+  font-family: 'Noto Serif Tamil', serif;
+  letter-spacing: 0.015em;
+}
+
+.tamil-title {
+  font-family: 'Noto Serif Tamil', serif;
+  letter-spacing: 0.025em;
+}
+
+.script-font {
+  font-family: 'Great Vibes', cursive;
+}
+
+.brush-font {
+  font-family: 'Alex Brush', cursive;
+}
+
+.cinzel-font {
+  font-family: 'Cinzel', serif;
+}
+
+/* Shimmering breath effect on golden medallion */
+@keyframes goldenShimmer {
+  0%, 100% { filter: drop-shadow(0 2px 5px rgba(197, 160, 89, 0.25)); }
+  50% { filter: drop-shadow(0 4px 14px rgba(197, 160, 89, 0.55)); }
+}
+.gold-shimmer {
+  animation: goldenShimmer 4s ease-in-out infinite;
+}
+
+/* Chevron gentle bob */
+@keyframes gentleBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.bobbing-chevron {
+  animation: gentleBob 2.4s ease-in-out infinite;
+}
+
+/* Seal pulse glow */
+@keyframes sealGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(197, 160, 89, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(197, 160, 89, 0.7), 0 0 35px rgba(232, 181, 184, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.5); }
+}
+.seal-pulse {
+  animation: sealGlow 3s ease-in-out infinite;
+}
+
+/* Scratch Canvas Glow */
+.scratch-container {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.scratch-revealed {
+  animation: revealGlow 0.8s ease-out forwards;
+}
+@keyframes revealGlow {
+  0% { filter: brightness(0.95); transform: scale(0.99); }
+  50% { filter: brightness(1.05) drop-shadow(0 0 14px rgba(197, 160, 89, 0.45)); transform: scale(1.01); }
+  100% { filter: brightness(1); transform: scale(1); }
+}
+
+/* ========================================================================= */
+/* 3D GATEFOLD & SCROLL PARALLAX UTILITIES                                   */
+/* ========================================================================= */
+
+.perspective-container {
+  perspective: 1200px;
+  perspective-origin: center center;
+}
+
+.panel-left-open {
+  transform: translate3d(-105%, 0, 0) rotateY(-12deg) scale(0.96);
+}
+
+.panel-right-open {
+  transform: translate3d(105%, 0, 0) rotateY(12deg) scale(0.96);
+}
+
+.reveal-init {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.25s; }
+.stagger-3 { transition-delay: 0.4s; }
+.stagger-4 { transition-delay: 0.55s; }
+.stagger-5 { transition-delay: 0.7s; }
+
+/* Parallax Layer Speeds using CSS Variables */
+.parallax-bg {
+  transform: translate3d(0, calc(var(--scroll-y, 0px) * 0.18), 0);
+  will-change: transform;
+}
+
+.parallax-mid {
+  transform: translate3d(0, calc(var(--scroll-y, 0px) * 0.08), 0);
+  will-change: transform;
+}
+
+.parallax-fore {
+  transform: translate3d(0, calc(var(--scroll-y, 0px) * -0.06), 0);
+  will-change: transform;
+}
+
+/* Respect Prefers Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .parallax-bg, .parallax-mid, .parallax-fore {
+    transform: none !important;
+  }
+}
+
+/* Custom scrollbar for mobile luxury feel */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF6EF;
+}
+::-webkit-scrollbar-thumb {
+  background: #C5A059;
+  border-radius: 10px;
+}
