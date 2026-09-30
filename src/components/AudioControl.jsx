@@ -4,7 +4,8 @@ import { Volume2, VolumeX } from 'lucide-react';
 const YOUTUBE_VIDEO_ID = 'ivrumxRUz_Y';
 
 export default function AudioControl({ autoPlayTrigger }) {
-  const [isPlaying, setIsPlaying] = useState(true); // Intended initial state: music ON
+  // UI state synchronizes with real YouTube player state (false until PLAYING fires)
+  const [isPlaying, setIsPlaying] = useState(false);
   const playerRef = useRef(null);
   const playRequestedRef = useRef(true); // Intended default: true on load
 
@@ -37,7 +38,7 @@ export default function AudioControl({ autoPlayTrigger }) {
           },
           events: {
             onReady: (event) => {
-              // 1. Immediate playback attempt as soon as the opening screen / player is ready
+              // Immediate playback attempt on page load when player is ready
               try {
                 event.target.unMute();
                 event.target.setVolume(35); // 35% background volume
@@ -49,9 +50,14 @@ export default function AudioControl({ autoPlayTrigger }) {
               }
             },
             onStateChange: (event) => {
+              // Synchronize UI button strictly with real player state
               if (event.data === window.YT.PlayerState.PLAYING) {
                 setIsPlaying(true);
-              } else if (event.data === window.YT.PlayerState.PAUSED) {
+              } else if (
+                event.data === window.YT.PlayerState.PAUSED ||
+                event.data === window.YT.PlayerState.UNSTARTED ||
+                event.data === window.YT.PlayerState.CUED
+              ) {
                 setIsPlaying(false);
               } else if (event.data === window.YT.PlayerState.ENDED) {
                 // Infinite loop fallback
@@ -119,7 +125,6 @@ export default function AudioControl({ autoPlayTrigger }) {
         playRequestedRef.current = false;
       } else {
         playerRef.current.playVideo();
-        setIsPlaying(true);
         playRequestedRef.current = true;
       }
     } catch (e) {
